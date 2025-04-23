@@ -81,7 +81,7 @@ class HypBert(nn.Module):
         poincare_model=None,
         idx2vec=None
     ):
-        if ENCODER_TYPE == 'microsoft/deberta-base':
+        if ENCODER_TYPE == 'microsoft/deberta-base' or ENCODER_TYPE == 'microsoft/deberta-v3-large':
             outputs = self.encoder(
                 input_ids,
                 attention_mask=attention_mask,
