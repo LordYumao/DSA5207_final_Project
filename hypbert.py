@@ -81,16 +81,26 @@ class HypBert(nn.Module):
         poincare_model=None,
         idx2vec=None
     ):
-        
-        outputs = self.encoder(
-            input_ids,
-            attention_mask=attention_mask,
-            token_type_ids=token_type_ids,
-            position_ids=position_ids,
-            head_mask=head_mask,
-            inputs_embeds=inputs_embeds,
-            output_hidden_states=True
-        )
+        if ENCODER_TYPE == 'microsoft/deberta-base':
+            outputs = self.encoder(
+                input_ids,
+                attention_mask=attention_mask,
+                token_type_ids=token_type_ids,
+                position_ids=position_ids,
+                # head_mask=head_mask,
+                inputs_embeds=inputs_embeds,
+                output_hidden_states=True
+            )
+        else:
+            outputs = self.encoder(
+                input_ids,
+                attention_mask=attention_mask,
+                token_type_ids=token_type_ids,
+                position_ids=position_ids,
+                head_mask=head_mask,
+                inputs_embeds=inputs_embeds,
+                output_hidden_states=True
+            )
 
         if ENCODER_TYPE == 'bert-base-uncased':
             sequence_output = outputs[0]
