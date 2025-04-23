@@ -4,7 +4,8 @@
 #SBATCH --output=./res/deberta_large_res.txt
 #SBATCH --error=./res/deberta_large_error.txt
 #SBATCH --time=120:00:00
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:a100-40:1
+#SBATCH --mem=128G
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=e1350606@u.nus.edu
 
