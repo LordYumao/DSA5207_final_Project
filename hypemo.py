@@ -37,7 +37,11 @@ class HypEmo():
         self.valid_loader = DataLoader(validset, batch_size=256, shuffle=False, collate_fn = validset.collate)
         testset = HyoEmoDataSet(dataset, 'test')
         self.test_loader = DataLoader(testset, batch_size=256, shuffle=False, collate_fn = testset.collate)
-        args.n_samples, args.feat_dim = len(trainset), 768
+        args.n_samples = len(trainset)
+        if ENCODER_TYPE == 'roberta-base':
+            args.feat_dim = 768
+        elif ENCODER_TYPE == 'roberta-large':
+            args.feat_dim = 1024
         args.n_classes = n_classes
         
         self.poincare_model = FGTCModel(args)

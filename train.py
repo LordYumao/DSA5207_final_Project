@@ -20,7 +20,9 @@ from util_functions import *
 from hypemo import HypEmo
 
 args = parser.parse_args()
-logging.basicConfig(filename=f'./exp/{args.dataset}_{args.alpha}_{args.gamma}.log', level=logging.INFO)
+# add time 
+now = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+logging.basicConfig(filename=f'./exp/{args.dataset}_{args.alpha}_{args.gamma}_{now}.log', level=logging.INFO)
 logging.getLogger().addHandler(logging.StreamHandler())
 
 label2idx, idx2label = label_dicts
@@ -32,6 +34,7 @@ args.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 logging.info(f'Using device {args.device}, seed={args.seed}, training on {args.dataset} dataset.')
+logging.info(f'args information:{args}')
 
 gm = HypEmo(args.dataset, num_classes, class_names, idx2vec, args.alpha, args.gamma, batch_size=args.batch_size)
 best_valid_weighted_f1, best_test_weighted_f1 = -1, -1

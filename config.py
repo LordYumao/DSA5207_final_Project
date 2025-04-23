@@ -4,7 +4,7 @@ import argparse
 from utils.train_utils import add_flags_from_config
 
 all_dataset_list = ['go_emotion', 'ED', 'ED_easy_4', 'ED_hard_a', 'ED_hard_b', 'ED_hard_c', 'ED_hard_d']
-ENCODER_TYPE = 'roberta-base'
+ENCODER_TYPE = 'roberta-large' # 'roberta-base' 'roberta-large' 'deberta-base' 'google/electra-base-discriminator'
 temperature = 0.3
 
 config_args = {
@@ -81,8 +81,11 @@ def get_dicts(dataset, return_emb_dicts=False):
         
     return label2idx, idx2label
     
-d, _ = config_args['data_config']['dataset']
-label_dicts, emb_dicts = get_dicts(d, return_emb_dicts=True)
+# d, _ = config_args['data_config']['dataset']
 parser = argparse.ArgumentParser()
 for _, config_dict in config_args.items():
     parser = add_flags_from_config(parser, config_dict)
+args = parser.parse_args() 
+print(f'args in config:{args}')
+d = args.dataset
+label_dicts, emb_dicts = get_dicts(d, return_emb_dicts=True)
