@@ -19,6 +19,8 @@ from sentence_transformers import SentenceTransformer
 from util_functions import *
 from hypemo import HypEmo
 
+import wandb
+
 args = parser.parse_args()
 # add time 
 now = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -45,13 +47,25 @@ train_weighted_f1, valid_weighted_f1, test_weighted_f1 = [], [], []
 
 total_train_time = 0
 total_test_time = 0
+
+wandb.login(key="d8a57853232ad9c5337ec726db40457ebbf81f1a")
+run = wandb.init(
+    # Set the wandb project where this run will be logged.
+    project="dsa5207-{}".format(ENCODER_TYPE),
+    # Track hyperparameters and run metadata.
+    config={
+        "data": args.dataset,
+        "seed": args.seed,
+    },
+)
+
 for i in range(args.epochs):
     start_time = time.time()
     train_log = gm.train_step(i)
     end_time = time.time()
     train_time = end_time - start_time
     total_train_time += train_time
-    logging.info(f"Training time for this epoch: {train_time:.2f}")
+    # logging.info(f"Training time for this epoch: {train_time:.2f}")
     
     valid_log = gm.valid_step(i)
     test_start_time = time.time()
@@ -59,7 +73,7 @@ for i in range(args.epochs):
     test_end_time = time.time()
     test_time = test_end_time - test_start_time
     total_test_time += test_time
-    logging.info(f"Inference time for this epoch: {test_time:.2f}")
+    # logging.info(f"Inference time for this epoch: {test_time:.2f}")
 
     train_acc.append(train_log['train_acc'])
     train_weighted_f1.append(train_log['train_weighted_f1'])
@@ -76,19 +90,35 @@ for i in range(args.epochs):
         best_valid_loss = valid_log['valid_loss']
         test_acc_best_valid = test_log['test_acc']
         test_weighted_f1_best_valid = test_log['test_weighted_f1']
-        logging.info(f"[valid loss new low] test | acc: {test_acc_best_valid:.04f}, f1: {test_weighted_f1_best_valid:.04f}")        
+        # logging.info(f"[valid loss new low] test | acc: {test_acc_best_valid:.04f}, f1: {test_weighted_f1_best_valid:.04f}")        
     
     if valid_log['valid_weighted_f1'] > best_valid_weighted_f1:
         best_valid_weighted_f1 = valid_log['valid_weighted_f1']
         best_valid_acc = valid_log['valid_acc']
         test_acc_best_valid = test_log['test_acc']
         test_weighted_f1_best_valid = test_log['test_weighted_f1']
-        logging.info(f"[valid f1 new high] test | acc: {test_acc_best_valid:.04f}, f1: {test_weighted_f1_best_valid:.04f}")
+        # logging.info(f"[valid f1 new high] test | acc: {test_acc_best_valid:.04f}, f1: {test_weighted_f1_best_valid:.04f}")
         
     if test_log['test_weighted_f1'] > best_test_weighted_f1:
         best_test_weighted_f1 = test_log['test_weighted_f1']
         best_test_acc = test_log['test_acc']
 
-    logging.info(f"[best] valid | acc: {best_valid_acc:.04f}, f1: {best_valid_weighted_f1:.04f}\n test | acc: {best_test_acc:.04f}, f1: {best_test_weighted_f1:.04f}") 
-logging.info(f"Average training time: {total_train_time/args.epochs}")
-logging.info(f"Average inference time: {total_test_time/args.epochs}")
+    # logging.info(f"[best] valid | acc: {best_valid_acc:.04f}, f1: {best_valid_weighted_f1:.04f}\n test | acc: {best_test_acc:.04f}, f1: {best_test_weighted_f1:.04f}") 
+    run.log({
+        "best_valid_acc": best_valid_acc, 
+        "best_valid_weighted_f1": best_valid_weighted_f1,
+        "best_test_acc": best_test_acc,
+        "best_test_weighted_f1": best_test_weighted_f1,
+        "train_time": train_time,
+        "test_time": test_time,
+        })
+
+# logging.info(f"Average training time: {total_train_time/args.epochs}")
+# logging.info(f"Average inference time: {total_test_time/args.epochs}")
+
+run.log({
+        "Average training time": total_train_time/args.epochs, 
+        "Average inference time": total_test_time/args.epochs,
+        })
+
+run.finish()
