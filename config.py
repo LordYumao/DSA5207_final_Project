@@ -4,7 +4,7 @@ import argparse
 from utils.train_utils import add_flags_from_config
 
 all_dataset_list = ['go_emotion', 'ED', 'ED_easy_4', 'ED_hard_a', 'ED_hard_b', 'ED_hard_c', 'ED_hard_d']
-ENCODER_TYPE = 'deberta-base' # 'roberta-base' 'roberta-large' 'deberta-base' 'google/electra-base-discriminator'
+ENCODER_TYPE = 'google/electra-base-discriminator' # 'roberta-base' 'roberta-large' 'deberta-base' 'google/electra-base-discriminator'
 temperature = 0.3
 
 config_args = {
