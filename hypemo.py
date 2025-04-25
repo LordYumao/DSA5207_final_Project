@@ -40,7 +40,7 @@ class HypEmo():
         args.n_samples = len(trainset)
         if ENCODER_TYPE == 'roberta-base' or ENCODER_TYPE == 'deberta-base' or ENCODER_TYPE == 'google/electra-base-discriminator':
             args.feat_dim = 768
-        elif ENCODER_TYPE == 'roberta-large' or ENCODER_TYPE == 'microsoft/deberta-v3-large':
+        elif ENCODER_TYPE == 'roberta-large' or ENCODER_TYPE == 'microsoft/deberta-v3-large' or ENCODER_TYPE == 'xlnet/xlnet-large-cased':
             args.feat_dim = 1024
         args.n_classes = n_classes
         

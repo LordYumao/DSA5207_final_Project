@@ -51,7 +51,7 @@ total_test_time = 0
 wandb.login(key="d8a57853232ad9c5337ec726db40457ebbf81f1a")
 run = wandb.init(
     # Set the wandb project where this run will be logged.
-    project="dsa5207-deberta-v3-large",
+    project="dsa5207-xlnet",
     # Track hyperparameters and run metadata.
     config={
         "data": args.dataset,
