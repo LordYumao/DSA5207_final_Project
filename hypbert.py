@@ -57,7 +57,10 @@ class HypBert(nn.Module):
         self.gamma = gamma
         self.encoder = AutoModel.from_pretrained(ENCODER_TYPE)
         self.config = self.encoder.config
-        self.dropout = nn.Dropout(self.config.hidden_dropout_prob)
+        if ENCODER_TYPE == "xlnet/xlnet-large-cased":
+            self.dropout = nn.Dropout(self.config.dropout)
+        else:
+            self.dropout = nn.Dropout(self.config.hidden_dropout_prob)
         self.pooler_fc = nn.Linear(self.config.hidden_size, self.config.hidden_size)
         self.classifier = nn.Linear(self.config.hidden_size, self.num_labels)
         # self.init_weights()
