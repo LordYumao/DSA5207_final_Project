@@ -4,7 +4,7 @@
 
 ---
 
-The code in this branch includes modifications to the HypEmo architecture in our project, incorporating trainable loss weights and the integration of a cross-attention module. All changes are based on the source code from the ACL 2023 paper [Label-Aware Hyperbolic Embeddings for Fine-grained Emotion Classification)](https://arxiv.org/abs/2306.14822). The original code is located at: https://github.com/dinobby/HypEmo.
+The code in this branch includes modifications to the HypEmo architecture in our project, incorporating trainable loss weights and the integration of a cross-attention module. All changes are based on the source code from the ACL 2023 paper [Label-Aware Hyperbolic Embeddings for Fine-grained Emotion Classification](https://arxiv.org/abs/2306.14822). The original code is located at: https://github.com/dinobby/HypEmo.
 
 
 
