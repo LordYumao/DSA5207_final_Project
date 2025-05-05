@@ -1,4 +1,0 @@
-#English
-#overseas
-lang:en
-study abroad
