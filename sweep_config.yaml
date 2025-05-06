@@ -1,0 +1,26 @@
+program: train_evaluate_baseline.py # 确认这是你的训练脚本名称
+method: grid # 使用 grid 搜索，它会尝试所有参数组合
+metric:
+  name: eval_f1_weighted # 仍然需要一个目标指标
+  goal: maximize
+parameters:
+  model_name:
+    values:
+      #- "bert-base-uncased"
+      #- "roberta-base"
+      #- "google/electra-base-discriminator" # 注意 ELECTRA 通常需要指定 google/ 前缀
+      #- "bert-large-uncased"
+      #- "roberta-large"
+      - "google/electra-large-discriminator" # ELECTRA large
+  seed:
+    values: [222, 333, 444, 555] # 你的 5 个随机种子，111,222,333,444,555 
+  dataset_name: # 脚本需要的参数，保持不变
+    value: "se2018_single"
+
+  # --- 你也可以在这里覆盖脚本中的默认超参数 ---
+  # --- 如果不设置，脚本会使用 argparse 定义的默认值 ---
+  # learning_rate:
+  #   value: 1e-5
+  # num_train_epochs:
+  #   value: 5
+  # ... 其他参数 ...
