@@ -16,7 +16,7 @@ conda activate qwen
 # python train.py --dataset go_emotion --batch_size 16 --seed 1234
 # python train.py --dataset go_emotion --batch_size 16 --seed 2345
 # python train.py --dataset go_emotion --batch_size 16 --seed 3456
-python train.py --dataset go_emotion --batch_size 16 --seed 4567
+python train.py --dataset go_emotion --batch_size 16 --seed 7890
 # python train.py --dataset go_emotion --batch_size 16 --seed 5678
 
 # ED

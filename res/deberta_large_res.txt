@@ -1,0 +1,2 @@
+args in config:Namespace(batch_size=16, epochs=20, seed=7890, alpha=0.9, gamma=0.1, dim=100, feat_dim=768, manifold='PoincareBall', c=1.0, r=2.0, t=1.0, dropout=0.1, pos_weight=0, num_layers=2, bias=1, act='relu', n_heads=4, a=0.2, dataset='go_emotion')
+[2025-04-25 15:00:27,245] [INFO] [real_accelerator.py:191:get_accelerator] Setting ds_accelerator to cuda (auto detect)
