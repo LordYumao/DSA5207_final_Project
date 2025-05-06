@@ -3,9 +3,9 @@ import pickle
 import argparse
 from utils.train_utils import add_flags_from_config
 
-all_dataset_list = ['go_emotion', 'ED', 'ED_easy_4', 'ED_hard_a', 'ED_hard_b', 'ED_hard_c', 'ED_hard_d']
-
+all_dataset_list = ['go_emotion', 'ED', 'ED_easy_4', 'ED_hard_a', 'ED_hard_b', 'ED_hard_c', 'ED_hard_d', 'test']
 ENCODER_TYPE = 'xlnet/xlnet-large-cased' # 'roberta-base' 'roberta-large' 'microsoft/deberta-base' 'google/electra-base-discriminator' 'xlnet/xlnet-large-cased' 'albert/albert-base-v2'
+
 temperature = 0.3
 
 config_args = {

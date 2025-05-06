@@ -28,7 +28,24 @@ class HyoEmoDataSet(Dataset):
         label = [l for _,l in batch]
         label_tensor = torch.tensor(label)
         return encode, label_tensor
+    
+class AdditionalDataSet(Dataset):
+    def __init__(self):
+        super().__init__()
+        df = pd.read_excel('data/comments_modified.xlsx')
+        self.text = df['test']
+        self.tkr = AutoTokenizer.from_pretrained(ENCODER_TYPE)
+        
+    def __len__(self):
+        return len(self.text)
 
+    def __getitem__(self, idx):
+        return self.text[idx]
+    
+    def collate(self, batch):
+        text = [t for t in batch]
+        encode = self.tkr(text, padding='longest', truncation= True, max_length=200, return_tensors='pt')
+        return encode
 
 class HyoEmoDataSetForBert(Dataset):
     def __init__(self, dataset, mode, encoder_type='bert-base-uncased', label_included=None, upper_label=None):

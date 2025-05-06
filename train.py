@@ -51,7 +51,7 @@ total_test_time = 0
 wandb.login(key="d8a57853232ad9c5337ec726db40457ebbf81f1a")
 run = wandb.init(
     # Set the wandb project where this run will be logged.
-    project="dsa5207-xlnet",
+    project="dsa5207-test",
     # Track hyperparameters and run metadata.
     config={
         "data": args.dataset,
@@ -102,6 +102,7 @@ for i in range(args.epochs):
     if test_log['test_weighted_f1'] > best_test_weighted_f1:
         best_test_weighted_f1 = test_log['test_weighted_f1']
         best_test_acc = test_log['test_acc']
+        gm.save_model(f'checkpoint.pt')
 
     # logging.info(f"[best] valid | acc: {best_valid_acc:.04f}, f1: {best_valid_weighted_f1:.04f}\n test | acc: {best_test_acc:.04f}, f1: {best_test_weighted_f1:.04f}") 
     run.log({

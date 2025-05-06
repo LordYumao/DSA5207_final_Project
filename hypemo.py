@@ -14,8 +14,7 @@ from torch.nn import MSELoss, CrossEntropyLoss
 from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import f1_score, accuracy_score
 
-
-from config import parser
+from config import parser, label_dicts
 from models.base_models import FGTCModel
 from util_functions import *
 from hypbert import HypBert
@@ -37,6 +36,10 @@ class HypEmo():
         self.valid_loader = DataLoader(validset, batch_size=256, shuffle=False, collate_fn = validset.collate)
         testset = HyoEmoDataSet(dataset, 'test')
         self.test_loader = DataLoader(testset, batch_size=256, shuffle=False, collate_fn = testset.collate)
+
+        additional_data = AdditionalDataSet()
+        self.additional_loader = DataLoader(additional_data, batch_size=256, shuffle=False, collate_fn = additional_data.collate)
+
         args.n_samples = len(trainset)
         if ENCODER_TYPE == 'roberta-base' or ENCODER_TYPE == 'deberta-base' \
             or ENCODER_TYPE == 'google/electra-base-discriminator'\
@@ -156,3 +159,34 @@ class HypEmo():
 
         logging.info(f'''test | acc: {test_acc:.04f}, f1: {test_weighted_f1:.04f}''')
         return {'test_pred': test_pred, 'test_acc': test_acc, 'test_weighted_f1': test_weighted_f1}
+    
+    def pred_step(self, path):
+        pred = None
+        with torch.no_grad():
+            for x in self.additional_loader:
+                input_ids, attention_mask = x['input_ids'].to(args.device), x['attention_mask'].to(args.device)
+                logits = self.model(input_ids=input_ids, attention_mask=attention_mask)['logits']
+                prediction = torch.argmax(logits, dim=-1)
+                if pred is None:
+                    pred = prediction
+                else:
+                    pred = torch.cat([pred, prediction])
+
+        pred = pred.detach().cpu().numpy()
+        texts = self.additional_loader.dataset.text
+        _, idx2label = label_dicts
+        labels = [idx2label[i] for i in pred]
+        df = pd.DataFrame({
+            'text': texts,
+            'prediction': pred,
+            'label': labels,
+        })
+        df.to_csv(path, index=False)
+
+    def save_model(self, path):
+        self.model.to('cpu')
+        torch.save(self.model.state_dict(), path)
+        self.model.to(args.device)
+
+    def load_model(self, path):
+        self.model.load_state_dict(torch.load(path))
